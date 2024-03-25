@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Reporting App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Reporting App</h1>
+        <label for="city-select">Select City:</label>
+        <select id="city-select">
+            <option value="Delhi">Delhi</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="London">London</option>
+            <option value="New York">New York</option>
+            <option value="Tokyo">Tokyo</option>
+            <option value="Paris">Paris</option>
+            <option value="Los Angeles">Los Angeles</option>
+            <option value="Moscow">Moscow</option>
+            <option value="Beijing">Beijing</option>
+            <option value="Istanbul">Istanbul</option>
+            <option value="Dubai">Dubai</option>
+            <option value="São Paulo">São Paulo</option>
+        </select>
+        <button id="fetch-btn">Fetch Weather</button>
+        <div class="weather-info">
+            <div class="weather-card">
+                <h2>Current Weather</h2>
+                <p id="current-weather"></p>
+            </div>
+            <div class="weather-card">
+                <h2>Temperature</h2>
+                <p id="temperature"></p>
+            </div>
+            <div class="weather-card">
+                <h2>Humidity</h2>
+                <p id="humidity"></p>
+            </div>
+            <div class="weather-card">
+                <h2>Wind Speed</h2>
+                <p id="wind-speed"></p>
+            </div>
+            <div class="weather-card">
+                <h2>Rainfall</h2>
+                <p id="rainfall"></p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="WeatherLibrary.js"></script>
+
+    <script>
+        // Initialize the weather library
+        const weatherLib = new WeatherLibrary('676fb6018d5002bb1a484a57bffd47fb');
+    
+        // Function to fetch and update weather data
+        async function updateWeatherData() {
+            const city = document.getElementById('city-select').value;
+    
+            try {
+                // Fetch weather data for the selected city
+                const data = await weatherLib.getWeatherData(city);
+    
+                // Update UI with weather data
+                document.getElementById('current-weather').textContent = data.weather;
+                document.getElementById('temperature').textContent = `${data.temperature}°C`;
+                document.getElementById('humidity').textContent = `${data.humidity}%`;
+                document.getElementById('wind-speed').textContent = `${data.windSpeed} m/s`;
+                document.getElementById('rainfall').textContent = `${data.rainfall} mm`;
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        }
+    
+        // Function to fetch and update weather data every 2 seconds
+        function fetchAndUpdateWeatherData() {
+            updateWeatherData(); // Fetch weather data immediately
+            setInterval(updateWeatherData, 2000); // Fetch weather data every 2 seconds
+        }
+    
+        // Event listener for the fetch button click
+        document.getElementById('fetch-btn').addEventListener('click', fetchAndUpdateWeatherData);
+    
+        // Fetch and update weather data for the default city on page load
+        fetchAndUpdateWeatherData();
+    </script>
+</body>
+</html>
